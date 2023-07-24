@@ -64,10 +64,10 @@ jobs:
           build-args: |
             "SSH_PRIVATE_KEY=${{secrets.SSH_PRIVATE_KEY}}"
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      #   - name: Move cache
+      #     run: |
+      #       rm -rf /tmp/.buildx-cache
+      #       mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: deploy app to cluster
         uses: kodermax/kubectl-aws-eks@597373ec549d9d0f173fdc9dc78bf9409b6d6821
