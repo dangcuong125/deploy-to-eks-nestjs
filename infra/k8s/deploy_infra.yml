@@ -1,0 +1,38 @@
+# This deploy is use for infra file update
+name: Deploy Infra
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'infra/**'
+
+jobs:
+  build-and-deploy-to-cluster:
+    name: Deploy Infra dev
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    env:
+      GKE_CLUSTER: vitadairy-k8s-dev
+      GKE_ZONE: asia-southeast1-b
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Authen GCP
+        uses: 'google-github-actions/auth@v0.4.0'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+
+      - name: Setup GCP
+        uses: google-github-actions/setup-gcloud@v0.6.0
+
+      - name: Get GKE credentials
+        run: |-
+          gcloud components install gke-gcloud-auth-plugin
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+          gcloud container clusters get-credentials $GKE_CLUSTER --zone=$GKE_ZONE
+
+      - name: Deploy to GKE
+        run: kubectl apply -R -f infra/k8s

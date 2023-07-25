@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keo-con-voi
+  labels:
+    app: keo-con-voi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: keo-con-voi
+  template:
+    metadata:
+      labels:
+        app: keo-con-voi
+    spec:
+      containers:
+        - name: keo-con-voi
+          image: 109195494803.dkr.ecr.ap-southeast-1.amazonaws.com/project-1:3988f7d001c954bfdc494d7b8c28eea08b59dbca
+          ports:
+            - containerPort: 5000
+              imagePullPolicy: Always
